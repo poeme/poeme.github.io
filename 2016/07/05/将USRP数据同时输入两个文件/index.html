@@ -65,9 +65,7 @@
     </header>
     <div class="entry">
       
-        <blockquote>
-<p>这里将演示怎么将数据同时从一个USRP输入到两个不同的文件中。<br><a id="more"></a><br>Step -1 创建一个新文件命名”foo.py”</p>
-</blockquote>
+        <p>这里将演示怎么将数据同时从一个USRP输入到两个不同的文件中。<br><a id="more"></a><br>Step -1 创建一个新文件命名”foo.py”</p>
 <p>Step-2 在开头编辑这两行<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python2.6</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br></pre></td></tr></table></figure></p>
 <p>根据自己的python版本修改python的版本号<br>这两行保证foo.py文件可执行</p>
 <p>Step-3 Import 所需的模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> gnuradio <span class="keyword">import</span> gr </span><br><span class="line"><span class="keyword">from</span> gnuradio <span class="keyword">import</span> uhd</span><br></pre></td></tr></table></figure></p>
