@@ -1,0 +1,227 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>采用GNU Radio 和USRP进行GMSK无线视频传输 | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="采用GNU Radio 和USRP进行GMSK无线视频传输"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-28T07:09:31.000Z"><a href="/2016/06/28/采用GNU Radio 和USRP进行GMSK无线视频传输/">2016-06-28</a></time>
+      
+      
+  
+    <h1 class="title">采用GNU Radio 和USRP进行GMSK无线视频传输</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>  现在的频谱基本上还是固定的频谱资源分配以及使用方式，即一个使用者得到了一个频段的使用权，其他人就是无权使用的。而现在频谱资源已经十分拥挤，而关于这方面的研究都致力于提高频谱的利用率，比如OFDM,MIMO技术等。而认知无线电技术又是一种全新的提高频谱利用率的技术，已经在无线通信领域有了很重要的意义以及很多的研究。<br><a id="more"></a></p>
+<h2 id="认知无线电介绍"><a href="#认知无线电介绍" class="headerlink" title="认知无线电介绍"></a>认知无线电介绍</h2><hr>
+<p>  考虑到一个使用者在使用频谱时，并不是一天24小时不间断使用，也不可能遍地都在使用，在时间和空间上，这些没有被使用的段就称为频谱空洞（sprctrum hole）。如图1所示。每一个被分配的频谱随时随地都有频谱空洞的可能，显然能在不影响这些拥有使用权的用户（授权用户，主用户，primary user ,PU）的情况下，重新使用这些频谱空洞。这种改善频谱利用率的方式成为机会式接入方式（dynamic spectrum access, DSA）。而这一类使用认知无线电技术的用户称为认知用户（次用户，secondary user,SU）.<br>  <img src="http://7xq3rr.com1.z0.glb.clouddn.com/spectrum-hole.png" alt="Fig1 spectrum hole"><br>  还有一种方式叫做开放共享方式，即SU可以将它的功率压到很低，差不多和噪声同一级别，这时SU的带宽需要很宽才能保证数据传输率，这样PU就算检测到了信号，也只是当做噪声处理。还有将两者结合的方式，称为分层接入方式。</p>
+<h2 id="GNURadio介绍"><a href="#GNURadio介绍" class="headerlink" title="GNURadio介绍"></a>GNURadio介绍</h2><hr>
+<p>  GNURadio是一个免费开源的认知无线电工具软件，提供了软件无线电所需的很多信号处理模块。它可以协同RF硬件平台（如USRP，Funcube Dongles， rtl-sdr，HackRF）构建软件无线电应用，也可以只用该平台进行仿真。<br>  它的底层模块一般是采用C++语言开发，上层一般采用Python，python与C++之间采用SWIG接口连接。GNU Radio Companion是GNU Radio的GUI用户界面。</p>
+<h2 id="USRP介绍"><a href="#USRP介绍" class="headerlink" title="USRP介绍"></a>USRP介绍</h2><hr>
+<p>USRP（Universal Software Radio Peripheral）是一系列软件定义无线电设备，现在由Ettus Research公司以及National Instruments公司开发。大部分的USRP都是通过高速的线缆与主计算机连接，用于软件用户控制USRP硬件以及传输数据。所有的USRP产品都由开源UHD（USRP hardware driver）驱动器控制，通常USRP与GNU Radio共同使用来搭建认知无线电平台。<br>USRP所有产品都有相似的结构。包括一个主板，提供了这些功能块，时钟产生和同步，FPGA，ADC，DAC，主处理器接口和功率调节等。还有一个子板，用来做模拟信号的处理，比如上/下变频，滤波等。这些功能使得USRP能支持从直流到6 GHz的信号的处理。<br>USRP支持Linux，MacOS和Windows平台。GNU Radio，LabVIEW，MATLAB以及 Simulink都可以使用UHD。</p>
+<h2 id="GMSK介绍"><a href="#GMSK介绍" class="headerlink" title="GMSK介绍"></a>GMSK介绍</h2><hr>
+<p>GMSK（高斯最小频移键控调制）是一种数字信号调制方式，是GSM通讯中采用的调制方法。这种数字调制方式的特点是没有不连续相位，频谱利用率高，因此应用比较广泛。<br>GMSK是基于MSK的一种连续相位频率键控的调制方法。MSK的边带超过了主载波，会导致给相邻信道造成干扰。但是GMSK就能克服这个问题。<br>由于频率每次都在载波过零点改变，因此能保证连续相位。这是由于MSK独有的特性，它的1电平和0电平对应的频率之差是数据率的一半。这就是调制指数，它总是0.5。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/signal%20using%20MSK%20modulation.png" alt="Fig2 signal using MSK modulation"><br>从MSK信号图形可以看出边带超过等于数据率的带宽。这可以通过在把调制后的信号给载波之前，将该信号通过一个低通滤波器。对低通滤波器的要求是需要窄带的，通带波形陡峭，比较理想的是高斯滤波器。因此MSK信号就变成了GMSK调制信号。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/spectral%20density%20of%20MSK%20and%20GMSK%20signals.png" alt="Fig3 spectral density of MSK and GMSK signals"><br>有两种方式可以实现GMSK调制过程，比较明显的是这样一个过程，首先将调制信号通过一个高斯低通滤波器，其次通过调频部分，调制指数设置成0.5。这种方法比较简单，但是有一点，调制指数必须是0.5，而在实际情况下由于器件的误差很难保证，因此并不实用。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/block%20diagram%20of%20I-Q%20modulator%20to%20create%20GMSK.png" alt="Fig4 block diagram of I-Q modulator to create GMSK signal"><br>第二种方法是正交调制。正交代表信号的相位是正交的或者说相位差90度。正交调制中，一个信号是同相信号另一个与它正交，这种调制也叫I-Q调制。使用这种调制方法，不需要任何其他设定，调制指数就能保证一定是0.5。因此这是更实用的一种方法。解调则是相反的过程。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/generate%20GMSK%20using%20Gaussian%20filter%20and%20VCO.png" alt="Fig5 generate GMSK using Gaussian filter and VCO"><br><strong>GMSK有以下优点：</strong></p>
+<ul>
+<li>首先相对于其他相位键控的方法，频率利用率高。</li>
+<li>其次可以使用非线性放大器放大而不会产生失真。这是由于这种调制方式与幅度无关。尤其在使用便携式设备的时候，比如手机。非线性放大器在直流功率转换成无线频率信号时更有效，这意味着一个对应的输出的功率消耗更少，对于手机无疑是很重要的一个特性。</li>
+<li>最后还是由于GMSK与幅度无关，因此对幅度变化不敏感，更有抗躁性，因为很多噪声都是幅度噪声。</li>
+</ul>
+<h2 id="GNU-Radio仿真设计"><a href="#GNU-Radio仿真设计" class="headerlink" title="GNU Radio仿真设计"></a>GNU Radio仿真设计</h2><hr>
+<p><img src="http://7xq3rr.com1.z0.glb.clouddn.com/simulatic_video_file_transmission.png" alt="Fig6 simulatic video file transmission"></p>
+<p>我们使用一个视频文件作为源，并在接收端接收视频文件，看是否能真实还原该视频。这里我们仅仅做一个仿真，只采用一个计算机，在GNU Radio上模拟一个信道，而并不使用USRP来将它通过空中无线信道发送，发送接收均在一个计算机上仿真，如图。这样可以注重于信号处理部分的实现和完善，便于发现问题。事实上采用GNU Radio仿真已经很接近实际情况了。<br>H264的二进制文件通过数据包编码模块将二进制数据流编码成合适的数据格式，这些数据然后进行GMSK调制，经过一个模拟信道加上噪声，再经过GMSK解调模块，将数据包解码，然后采用H264解码播放，这里直接采用VLC对接收到的视频文件进行解码播放。如图所示。</p>
+<p>首先是测试H264视频流的产生，可以参考文献<a href="http://blog.chinaunix.net/uid-26527046-id-4409467" target="_blank" rel="external">4</a>，采用VLC软件可以方便的产生视频流，并通过UDP通信将视频流传输到GNU Radio。<br>其次在GNU Radio中，我们采用GNURadio companion中的流图来实现，如下图所示。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/gnuradio/kuangtu.png" alt="Fig7 video transmission in gnuradio companion"><br>直接在一台计算机上作为一个测试程序使用，如果没有问题，则将源和漏替换成USRP即可。<br>这里video.ts是从VLC上推送的视频流文件。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/gnuradio/video.png" alt="Fig8 video in PC"></p>
+<p>参考文献：<br><a href="http://www.radio-electronics.com/info/rf-technology-design/pm-phase-modulation/what-is-gmsk-gaussian-minimum-shift-keying-tutorial.php" target="_blank" rel="external">1.What is GMSK Modulation - Gaussian Minimum Shift Keying</a><br><a href="http://www.wu.ece.ufl.edu/projects/wirelessVideo/project/H264_USRP/index.htm#Introduction" target="_blank" rel="external">2.Cross-layer wireless video testbed</a><br><a href="http://wiki.oz9aec.net/index.php/Simple_DVB_with_Gstreamer_and_GNU_Radio" target="_blank" rel="external">3.Simple DVB with Gstreamer and GNU Radio</a><br><a href="http://blog.chinaunix.net/uid-26527046-id-4409467" target="_blank" rel="external">4.linux中使用VLC实现摄像头多媒体流的推送</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/GNURadio/">GNURadio</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/06/28/dial_tone.py逐句解释/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/06/27/Ubuntu12.04 LTS 搭建java开发环境(eclipse+maven)/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/06/28/采用GNU Radio 和USRP进行GMSK无线视频传输/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

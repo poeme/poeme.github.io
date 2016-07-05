@@ -1,0 +1,240 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Ubuntu12.04 LTS 搭建java开发环境(eclipse+maven) | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Ubuntu12.04 LTS 搭建java开发环境(eclipse+maven)"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-27T13:01:19.000Z"><a href="/2016/06/27/Ubuntu12.04 LTS 搭建java开发环境(eclipse+maven)/">2016-06-27</a></time>
+      
+      
+  
+    <h1 class="title">Ubuntu12.04 LTS 搭建java开发环境(eclipse+maven)</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>要在Linux下进行Java开发或者需要Java运行环境时，这里记录了其步骤。<br><a id="more"></a></p>
+<h2 id="1、准备"><a href="#1、准备" class="headerlink" title="1、准备"></a>1、准备</h2><hr>
+<p>在终端输入命令java -version后可以看到，电脑上并没有安装java环境。<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -<span class="built_in">version</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="http://7xq3rr.com1.z0.glb.clouddn.com/ubuntu/java-version.png" alt=""><br>可以看到系统并无java运行环境。<br>下面就来搭建java环境！</p>
+<h2 id="2、下载JDK并解压"><a href="#2、下载JDK并解压" class="headerlink" title="2、下载JDK并解压"></a>2、下载JDK并解压</h2><hr>
+<p>网址： <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="external">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a><br>根据自己的需求寻找并下载JDK版本，我的电脑64位，安装JDK6，所以下载的是jdk-6u45-linux-x64.bin。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/ubuntu/JSE.png" alt=""><br>解压（先进入下载路径下）：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>sudo chmod +x jdk-<span class="number">6</span>u45-linux-x64.bin</span><br><span class="line"><span class="variable">$ </span>./jdk-<span class="number">6</span>u45-linux-x64.bin</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://7xq3rr.com1.z0.glb.clouddn.com/ubuntu/install%20JDK.png" alt=""><br>此时可以看到文件夹里多了一个文件夹：<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/ubuntu/JDK.png" alt=""></p>
+<h2 id="3、安装JDK"><a href="#3、安装JDK" class="headerlink" title="3、安装JDK"></a>3、安装JDK</h2><hr>
+<p>先新建一个目录安装JDK，并将解压后的文件夹拷贝过去：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~<span class="regexp">/software$ sudo mkdir /usr</span><span class="regexp">/lib/jvm</span></span><br><span class="line">~<span class="regexp">/software$ sudo cp -a jdk1.6.0_45/</span> /usr/<span class="class"><span class="keyword">lib</span>/<span class="title">jvm</span></span></span><br></pre></td></tr></table></figure></p>
+<p>接着对profile进行配置：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo gedit <span class="meta-keyword">/etc/</span>profile</span><br></pre></td></tr></table></figure></p>
+<p>在profile文件末尾添加：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/jdk1.6.0_45 <span class="built_in">export</span> JRE_HOME=/usr/lib/jvm/jdk1.6.0_45/jre <span class="built_in">export</span> CLASSPATH=.:<span class="variable">$CLASSPATH</span>:</span><br><span class="line"></span><br><span class="line"><span class="variable">$JAVA_HOME</span>/lib:<span class="variable">$JRE_HOME</span>/lib <span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$JRE_HOME</span>/bin:<span class="variable">$JAVA_HOME</span>:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure></p>
+<p>并保存。<br>使profile配置生效，输入命令：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">source</span> <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure></p>
+<p>此时输入命令：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java -<span class="built_in">version</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到JDK版本:<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/ubuntu/java-version1.png" alt=""></p>
+<h2 id="4、下载elicpse并解压"><a href="#4、下载elicpse并解压" class="headerlink" title="4、下载elicpse并解压"></a>4、下载elicpse并解压</h2><hr>
+<p>网址：<a href="http://www.eclipse.org/downloads/?osType=linux&amp;release=undefined" target="_blank" rel="external">http://www.eclipse.org/downloads/?osType=linux&amp;release=undefined</a><br>按照自己的需求选择合适的版本镜像下载，我64位电脑，又因为是java6，所以下载eclipse 4.4, 下载的文件是：eclipse-jee-luna-SR2-</p>
+<p>linux-gtk-x86_64.tar.gz。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/ubuntu/IDE.png" alt=""><br>解压：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~software$ tar zxvf eclipse-jee-luna-SR2-linux-gtk-x86_64<span class="selector-class">.tar</span><span class="selector-class">.gz</span></span><br></pre></td></tr></table></figure></p>
+<p>cd到eclipse文件夹，并执行：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~software /eclipse<span class="variable">$ </span> ./eclipse</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://7xq3rr.com1.z0.glb.clouddn.com/ubuntu/eclipse.png" alt=""></p>
+<h2 id="5、下载maven并解压"><a href="#5、下载maven并解压" class="headerlink" title="5、下载maven并解压"></a>5、下载maven并解压</h2><hr>
+<p>网址：<a href="http://maven.apache.org/download.cgi" target="_blank" rel="external">http://maven.apache.org/download.cgi</a><br>同样按照自己所需版本进行下载，我是java6，所以下载maven3.2，下载文件是：<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/ubuntu/java6.png" alt=""><br>并将解压后的文件夹拷贝到jvm文件夹<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~software<span class="variable">$ </span>sudo cp -a apache-maven-<span class="number">3.2</span>.<span class="number">5</span>/ <span class="regexp">/usr/lib</span><span class="regexp">/jvm</span></span><br></pre></td></tr></table></figure></p>
+<p>链接 到/usr/bin/mvn :<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo ln -s /usr/<span class="class"><span class="keyword">lib</span>/<span class="title">jvm</span>/<span class="title">apache</span>-<span class="title">maven</span>-3.2.5/<span class="title">bin</span>/<span class="title">mvn</span> /<span class="title">usr</span>/<span class="title">bin</span>/<span class="title">mvn</span></span></span><br></pre></td></tr></table></figure></p>
+<p>接着对profile进行配置：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo gedit <span class="meta-keyword">/etc/</span>profile</span><br></pre></td></tr></table></figure></p>
+<p>在profile文件末尾修改成：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=<span class="regexp">/usr/lib</span><span class="regexp">/jvm/jdk</span>1.<span class="number">6.0_45</span></span><br><span class="line">export JRE_HOME=<span class="regexp">/usr/lib</span><span class="regexp">/jvm/jdk</span>1.<span class="number">6.0_45</span>/jre</span><br><span class="line">export MAVEN_HOME=<span class="regexp">/usr/lib</span><span class="regexp">/jvm/apache</span>-maven-<span class="number">3.2</span>.<span class="number">5</span> </span><br><span class="line">export CLASSPATH=.:$<span class="symbol">CLASSPATH:</span>$JAVA_HOME/<span class="class"><span class="keyword">lib</span>:$<span class="title">JRE_HOME</span>/<span class="title">lib</span> </span></span><br><span class="line">export PATH=$JAVA_HOME/<span class="symbol">bin:</span>$MAVEN_HOME/<span class="symbol">bin:</span>$JRE_HOME/<span class="symbol">bin:</span>$<span class="symbol">JAVA_HOME:</span>$PATH</span><br></pre></td></tr></table></figure></p>
+<p>并保存<br>使profile配置生效，输入命令：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">source</span> <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure></p>
+<h2 id="6、eclipse-maven插件安装"><a href="#6、eclipse-maven插件安装" class="headerlink" title="6、eclipse maven插件安装"></a>6、eclipse maven插件安装</h2><hr>
+<pre><code>（1）打开eclipse，菜单Help-&gt;Eclipse marketplace -&gt;Find maven
+（2）安装Maven integration for Eclipse（Juno or newer）
+（3）配置插件：
+    Windows-&gt;preferences-&gt;Maven-&gt;Installations:
+    将/usr/lib/jvm/apache-maven-3.2.5添加进入
+</code></pre><p>以上各个插件，eclipse和maven在需要的时候安装即可，只要把JDK安装好了，就可以跑java程序了。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/linux/">linux</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/06/28/采用GNU Radio 和USRP进行GMSK无线视频传输/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/06/27/windows系统下hexo环境配置/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/06/27/Ubuntu12.04 LTS 搭建java开发环境(eclipse+maven)/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Python中使用pyBrain的神经网络回归模型 | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Python中使用pyBrain的神经网络回归模型"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-29T11:05:06.000Z"><a href="/2016/06/29/Python中使用pyBrain的神经网络回归模型/">2016-06-29</a></time>
+      
+      
+  
+    <h1 class="title">Python中使用pyBrain的神经网络回归模型</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>pybrain是一个开源的神经网络机器学习模型库，想使用python进行神经网络训练再合适不过了。<br><a id="more"></a></p>
+<h2 id="1、建立一个网络"><a href="#1、建立一个网络" class="headerlink" title="1、建立一个网络"></a>1、建立一个网络</h2><hr>
+<p>快速建立一个全连接网络可以直接调用buildNetwork()模块：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> pybrain.tools.shortcuts <span class="keyword">import</span> buildNetwork</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>net = buildNetwork(<span class="number">22</span>,<span class="number">16</span>,<span class="number">16</span>)</span><br></pre></td></tr></table></figure></p>
+<p>这是包括22个输入，隐层有16个节点，16个输出的全连接神经网络。<br>buildNetwork()还有更多参数可以进行设置，这可以查阅相应API：<a href="http://pybrain.org/docs/index.html。" target="_blank" rel="external">http://pybrain.org/docs/index.html。</a><br>除了快速建立一个网络外，还可以分别自定义各个模块，在连接起来，这种方法更灵活，当然也复杂一些。以前向神经网络为例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#先定义一个前向神经网络对象：</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> pybrain.structure <span class="keyword">import</span> FeedForwardNetwork</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n = FeedForwardNetwork()</span><br><span class="line"><span class="comment">#定义输入层，隐层，输出层模块：</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> pybrain.structure <span class="keyword">import</span> LinearLayer, SigmoidLayer</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>inLayer = LinearLayer(<span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hiddenLayer = SigmoidLayer(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>outLayer = LinearLayer(<span class="number">1</span>)</span><br><span class="line"><span class="comment">#将输入层，隐藏层，输出层模块加入神经网络对象中：</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n.addInputModule(inLayer)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n.addModule(hiddenLayer)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n.addOutputModule(outLayer)</span><br><span class="line"><span class="comment">#定义从输入到隐藏层，隐藏层到输出层的全连接模块：</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> pybrain.structure <span class="keyword">import</span> FullConnection</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>in_to_hidden = FullConnection(inLayer, hiddenLayer)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hidden_to_out = FullConnection(hiddenLayer, outLayer)</span><br><span class="line"><span class="comment">#将全连接模块也加入神经网络对象中：</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n.addConnection(in_to_hidden)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n.addConnection(hidden_to_out)</span><br><span class="line"><span class="comment">#将神经网络架设起来，并初始化;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n.sortModules()</span><br></pre></td></tr></table></figure></p>
+<p>神经网络各层都可以自定义命名，参考API对各个模块里面的name字段可以进行设置。</p>
+<h2 id="2、建立数据集"><a href="#2、建立数据集" class="headerlink" title="2、建立数据集"></a>2、建立数据集</h2><hr>
+<p>要进行训练，则必须有训练集，pybrain里面有相应的数据集模块，本文使用的是监督学习数据集。<br>原始数据存放在txt文件中，每一行代表一个样本，一个样本里面有输入，输出向量如下（公交客流数据，2~24字段是输入，24~40字段是输出）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">线路15,20140810,207,836,1466,1287,1203,1050,806,908,959,927,999,1443,1298,896,856,609,10,10,33,26,3,3,315,811,1231,1395,1308,1139,789,945,921,869,1053,1334,1259,993,605,324</span><br><span class="line">线路15,20140817,315,811,1231,1395,1308,1139,789,945,921,869,1053,1334,1259,993,605,324,2,2,34,25,3,3,324,777,1290,1498,1267,928,730,802,973,861,1115,1385,1312,939,508,166</span><br><span class="line">…… ……</span><br><span class="line">…… ……</span><br></pre></td></tr></table></figure></p>
+<p>使用如下代码先将数据导入python中：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">loadData</span><span class="params">()</span>:</span></span><br><span class="line"> fileIn=open(<span class="string">'samples.txt'</span>,<span class="string">'r'</span>)</span><br><span class="line"> features = []</span><br><span class="line"> target=[]</span><br><span class="line"> <span class="keyword">for</span> line <span class="keyword">in</span> fileIn.readlines():</span><br><span class="line"> lineArr = line.strip().split(<span class="string">","</span>) <span class="comment">#list</span></span><br><span class="line"> temp1=[]</span><br><span class="line"> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">24</span>):</span><br><span class="line">  temp1.append(float(lineArr[i]))</span><br><span class="line">  features.append(temp1)</span><br><span class="line"> temp2=[]</span><br><span class="line"> <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">24</span>,<span class="number">40</span>):</span><br><span class="line">  temp2.append(float(lineArr[j]))</span><br><span class="line">  target.append(temp2) </span><br><span class="line"> <span class="keyword">return</span> features,target</span><br></pre></td></tr></table></figure></p>
+<p>使用pybrain里的模块SupervisedDataSet()建立数据集:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pybrain.datasets <span class="keyword">import</span> SupervisedDataSet</span><br><span class="line">ds=SupervisedDataSet(<span class="number">22</span>,<span class="number">16</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(features)):</span><br><span class="line">  ds.addSample(tuple(features[i]),tuple(target[i]))</span><br><span class="line"><span class="comment">#将样本分成训练集和测试集</span></span><br><span class="line">TrainDS,TestDS = ds.splitWithProportion(<span class="number">0.8</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="3、训练模型"><a href="#3、训练模型" class="headerlink" title="3、训练模型"></a>3、训练模型</h2><hr>
+<p>神经网络和训练数据集都已构造完成，就可以训练神经网络模型了。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#一直训练至收敛，或者达到1000次迭代</span></span><br><span class="line">&gt;&gt;&gt;trainer=BackpropTrainer(fnn,TrainDS,momentum=<span class="number">0.1</span>,verbose=<span class="keyword">True</span>,weightdecay=<span class="number">0.01</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>trainer.trainUntilConvergence(maxEpochs=<span class="number">1000</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="4、进行测试"><a href="#4、进行测试" class="headerlink" title="4、进行测试"></a>4、进行测试</h2><hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#对每一个测试样本进行预测，并输出准确率 </span></span><br><span class="line"><span class="keyword">for</span> test_features,test_targets <span class="keyword">in</span> TestDS:</span><br><span class="line">   test_predict=fnn.activate(test_features)</span><br><span class="line">   temp=abs(test_predict-test_target)/test_target</span><br><span class="line">   <span class="keyword">print</span> temp</span><br></pre></td></tr></table></figure>
+<h2 id="5、进行预测"><a href="#5、进行预测" class="headerlink" title="5、进行预测"></a>5、进行预测</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#采用activate模块进行预测</span></span><br><span class="line">&gt;&gt;&gt;predict=fnn.activate(predict_features)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/机器学习/">机器学习</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/07/05/Start(), Stop(), run(), wait() in GNURADIO  top_block/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/06/29/Ubuntu安装Gstreamer/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/06/29/Python中使用pyBrain的神经网络回归模型/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

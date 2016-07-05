@@ -1,0 +1,227 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Ubuntu 12.04 LTS 配置python数据挖掘编程环境与mySQL | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Ubuntu 12.04 LTS 配置python数据挖掘编程环境与mySQL"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-29T09:13:48.000Z"><a href="/2016/06/29/Ubuntu 12.04 LTS 配置python数据挖掘编程环境与mySQL/">2016-06-29</a></time>
+      
+      
+  
+    <h1 class="title">Ubuntu 12.04 LTS 配置python数据挖掘编程环境与mySQL</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>mysql数据库操作简单，平台不限，因此很多场合都会使用，就算是大型分布式平台底层数据库大都基于mysql。但是虽然不难，一段时间不用时基本命令难免生疏，记录下来这些常见操作，省了很多事情。<br><a id="more"></a></p>
+<h2 id="1、python编程环境"><a href="#1、python编程环境" class="headerlink" title="1、python编程环境"></a>1、python编程环境</h2><hr>
+<p>Ubuntu 12.04中缺省安装了Python2.7.3，首先通过下面的命令安装pip，pip是Python的一个安装和管理扩展库的工具。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install python-pip</span><br></pre></td></tr></table></figure></p>
+<p> 安装Python开发环境，方便今后编译其他扩展库，因为要采用python进行数据挖掘，所以要安装必要的库。<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install python-dev</span><br><span class="line">$ sudo apt-get install python-numpy</span><br></pre></td></tr></table></figure></p>
+<p>python2.7 documentation: <a href="https://docs.python.org/2/tutorial/index.html" target="_blank" rel="external">https://docs.python.org/2/tutorial/index.html</a></p>
+<h2 id="2、安装mySQL"><a href="#2、安装mySQL" class="headerlink" title="2、安装mySQL"></a>2、安装mySQL</h2><hr>
+<p>安装mysql:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install mysql-server mysql-client</span><br></pre></td></tr></table></figure></p>
+<p>会出现配置信息，按要求填就行了。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install libmysqld-dev</span><br></pre></td></tr></table></figure></p>
+<p>一旦安装完成，MySQL 服务器应该自动启动。您可以在终端提示符后运行以下命令来检查 MySQL 服务器是否正在运行:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo netstat -tap | grep mysql</span><br></pre></td></tr></table></figure></p>
+<p>当运行该命令时，可以看到类似下面的行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tcp 0 0 localhost.localdomain:mysql *:* LISTEN -</span><br><span class="line">``` </span><br><span class="line">如果服务器不能正常运行，您可以通过下列命令启动它：</span><br><span class="line">```bash</span><br><span class="line">$ sudo /etc/init.d/mysql restart</span><br></pre></td></tr></table></figure></p>
+<p>进入mysql的命令如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -uroot -p 管理员密码</span><br></pre></td></tr></table></figure></p>
+<h2 id="3、在python下使用mySQL"><a href="#3、在python下使用mySQL" class="headerlink" title="3、在python下使用mySQL"></a>3、在python下使用mySQL</h2><hr>
+<p>安装mysql-python，将mysql与python连接起来，但是apt-get里没有mysql-python,只能采用安装包安装。<br>下载：<a href="https://sourceforge.net/projects/mysql-python/" target="_blank" rel="external">https://sourceforge.net/projects/mysql-python/</a><br>进入到下载文件夹下并解压：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar zxvf MySQL-python-1.2.4b4.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>注意：要仔细看INSTALL文档，python版本要在2.3以上。<br>由于setup.py需要mysql_config来找到配置信息，先确认mysql_config是否存在以及它的路径：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">which</span> mysql_config</span><br></pre></td></tr></table></figure></p>
+<p>结果是/usr/bin/mysql_config这个在默认路径里，不用去修改site.cfg中的配置。<br> 如果不放心，则用其路径替换site.cfg中对应的配置，去掉mysql_config=XXX这行的注释， 并改成mysql_config=/usr/bin/mysql_config（以mysql_config文件所在机器上的目录为准）<br> 接下来就是安装（先cd到解压后的路径里）：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="comment"># edit site.cfg if necessary</span></span><br><span class="line">$ python setup.py build</span><br><span class="line">$ sudo python setup.py install <span class="comment"># or su first</span></span><br></pre></td></tr></table></figure></p>
+<p>在python环境中：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import MySQLdb</span><br></pre></td></tr></table></figure></p>
+<p>如果没有问题就安装成功了。</p>
+<h2 id="4-ubuntu12-04-MySQL图形界面安装"><a href="#4-ubuntu12-04-MySQL图形界面安装" class="headerlink" title="4. ubuntu12.04 MySQL图形界面安装"></a>4. ubuntu12.04 MySQL图形界面安装</h2><p>先安装workbench然后登录:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install mysql-workbench</span><br><span class="line">$ mysql-workbench -u root -p</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://7xq3rr.com1.z0.glb.clouddn.com/linux/mysql.png" alt=""><br>分为三个主要功能模块：Sql Development(Sql开发 相当于Sql2000中的查询分析器), Data Modeling(数据库建模), Server Administration(服务器管理 相当于Sql2000中的企业管理器)。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/linux/">linux</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/06/29/快速学习ubuntu12.04中MySQL基本操作/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/06/28/linux中使用VLC实现摄像头多媒体流的推送/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/06/29/Ubuntu 12.04 LTS 配置python数据挖掘编程环境与mySQL/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

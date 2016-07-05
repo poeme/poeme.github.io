@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>UDP socket学习示例 | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="UDP socket学习示例"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-28T11:16:17.000Z"><a href="/2016/06/28/UDP socket学习示例/">2016-06-28</a></time>
+      
+      
+  
+    <h1 class="title">UDP socket学习示例</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>网络中两个进程要通信基本条件是能唯一标志一个进程，本地进程通讯中我们可以使用PID来唯一标示一个进程，但PID只在本地唯一，而在网络中却不是唯一的。而在TCP/IP协议中，IP层的ip地址可以唯一标示主机，而TCP层协议和端口号可以唯一标示主机的一个进程，这样我们可以利用ip地址＋协议＋端口号唯一标示网络中的一个进程。能唯一标志一个进程后，接着就是两个进程就可以通过socket进行通信了。<br><a id="more"></a></p>
+<h2 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h2><p>TCP/IP（Transmission Control Protocol/Internet Protocol）即传输控制协议/网间协议，定义了主机如何连入因特网及数据如何再它们之间传输的标准，</p>
+<p>从字面意思来看TCP/IP是TCP和IP协议的合称，但实际上TCP/IP协议是指因特网整个TCP/IP协议族。不同于ISO模型的七个分层，TCP/IP协议参考模型把所有的TCP/IP系列协议归类到四个抽象层中</p>
+<p>应用层：TFTP，HTTP，SNMP，FTP，SMTP，DNS，Telnet 等等</p>
+<p>传输层：TCP，UDP</p>
+<p>网络层：IP，ICMP，OSPF，EIGRP，IGMP</p>
+<p>数据链路层：SLIP，CSLIP，PPP，MTU</p>
+<p>每一抽象层建立在低一层提供的服务上，并且为高一层提供服务。</p>
+<h2 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h2><p>socket起源于UNIX，在Unix一切皆文件哲学的思想下，socket是一种”打开—读/写—关闭”模式的实现，服务器和客户端各自维护一个”文件”，在建立连接打开后，可以向自己文件写入内容供对方读取或者读取对方内容，通讯结束时关闭文件。</p>
+<p>socket是在应用层和传输层之间的一个抽象层，应用层直接通过socket与底层通信，这样避免了复杂的接口操作。</p>
+<p>通常服务器在启动的时候都会绑定一个众所周知的地址（如ip地址+端口号），用于提供服务，客户就可以通过它来接连服务器；而客户端就不用指定，有系统自动分配一个端口号和自身的ip地址组合。这就是为什么通常服务器端在listen之前会调用bind()，而客户端就不会调用，而是在connect()时由系统随机生成一个。如下图中是TCP协议通讯的socket的过程。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/Python/socket.png" alt=""></p>
+<h2 id="UDP-socket的一个例子"><a href="#UDP-socket的一个例子" class="headerlink" title="UDP socket的一个例子"></a>UDP socket的一个例子</h2><p>UDP没有三次握手，相对简单。</p>
+<p>server.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># Echo server program</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'This is UDP demo'</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'This is Server, and should be run before Client'</span></span><br><span class="line"></span><br><span class="line">HOST = <span class="string">''</span>                 <span class="comment"># Symbolic name meaning the local host</span></span><br><span class="line">PORT = <span class="number">50007</span>              <span class="comment"># Arbitrary non-privileged port</span></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line">s.bind((HOST, PORT))</span><br><span class="line"><span class="keyword">print</span> <span class="string">'socket for listen is'</span>, s.getsockname()</span><br><span class="line"><span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">    data = s.recv(<span class="number">1024</span>)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'received data from client is:'</span>,repr(data)</span><br><span class="line">    <span class="comment">#s.send(data)</span></span><br><span class="line">    <span class="keyword">if</span> data == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'closing server'</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">'the demo is finished'</span></span><br></pre></td></tr></table></figure></p>
+<p>client.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># Echo client program</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'This is UDP demo'</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'We assume the same PC for server and client, you may need to reset the server IP address here'</span></span><br><span class="line"></span><br><span class="line">hostIP = raw_input(<span class="string">'please input server IP address: '</span>)</span><br><span class="line">HOST = hostIP    <span class="comment"># The remote host</span></span><br><span class="line">PORT = <span class="number">50007</span>              <span class="comment"># The same port as used by the server</span></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line">s.connect((HOST, PORT))</span><br><span class="line"><span class="keyword">print</span> <span class="string">'Connected to'</span>, s.getpeername()</span><br><span class="line"><span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">    Dtransmit=raw_input(<span class="string">'please input your data here: '</span>)</span><br><span class="line">    sent=s.send(Dtransmit)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'sent ='</span>, sent</span><br><span class="line"><span class="keyword">print</span> <span class="string">'transmitted'</span>, len(Dtransmit), <span class="string">'bytes'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'the demo is finished'</span></span><br><span class="line"><span class="comment">#z=raw_input('close?: ')</span></span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Python/">Python</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/06/28/linux中使用VLC实现摄像头多媒体流的推送/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/06/28/dial_tone.py逐句解释/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/06/28/UDP socket学习示例/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

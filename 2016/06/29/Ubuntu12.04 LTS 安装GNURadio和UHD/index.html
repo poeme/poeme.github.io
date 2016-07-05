@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Ubuntu12.04 LTS 安装GNURadio和UHD | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Ubuntu12.04 LTS 安装GNURadio和UHD"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-29T10:34:05.000Z"><a href="/2016/06/29/Ubuntu12.04 LTS 安装GNURadio和UHD/">2016-06-29</a></time>
+      
+      
+  
+    <h1 class="title">Ubuntu12.04 LTS 安装GNURadio和UHD</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Ubuntu环境配置认知无线电开发环境包括以下内容(如果有USRP设备，则要安装UHD)：<br>1、准备库的安装<br>2、UHD的安装<br>3、GNU Radio的安装<br>4、环境变量的设置<br><a id="more"></a></p>
+<h2 id="1、准备库的安装"><a href="#1、准备库的安装" class="headerlink" title="1、准备库的安装"></a>1、准备库的安装</h2><hr>
+<p>不同版本的ubuntu系统准备库是不一样的，这个可以直接参考：<br><a href="http://gnuradio.org/redmine/projects/gnuradio/wiki/UbuntuInstall" target="_blank" rel="external">http://gnuradio.org/redmine/projects/gnuradio/wiki/UbuntuInstall</a><br>我采用的ubuntu12.04准备库安装代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get -y install git-core autoconf automake  libtool g++ python-dev swig \</span><br><span class="line">pkg-config libboost1.48-all-dev libfftw3-dev libcppunit-dev libgsl0-dev \</span><br><span class="line">libusb-dev sdcc libsdl1.2-dev python-wxgtk2.8 python-numpy \</span><br><span class="line">python-cheetah python-lxml doxygen python-qt4 python-qwt5-qt4 libxi-dev \</span><br><span class="line">libqt4-opengl-dev libqwt5-qt4-dev libfontconfig1-dev libxrender-dev</span><br></pre></td></tr></table></figure></p>
+<h2 id="2、UHD安装"><a href="#2、UHD安装" class="headerlink" title="2、UHD安装"></a>2、UHD安装</h2><hr>
+<p>我们采用的UHD版本是003.004.000，直接在官网上下载，或者从设备所带光盘中获得：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> uhd/host</span><br><span class="line">$ mkdir build</span><br><span class="line">$ <span class="built_in">cd</span> build</span><br><span class="line">$ cmake ../</span><br><span class="line">$ make</span><br><span class="line">$ make <span class="built_in">test</span></span><br><span class="line">$ sudo make install</span><br></pre></td></tr></table></figure></p>
+<h2 id="3、安装GNU-Radio"><a href="#3、安装GNU-Radio" class="headerlink" title="3、安装GNU Radio"></a>3、安装GNU Radio</h2><hr>
+<p>先下载源码，可以手动在<a href="http://gnuradio.org/redmine/projects/gnuradio/files下载，或者采用git自动下载：" target="_blank" rel="external">http://gnuradio.org/redmine/projects/gnuradio/files下载，或者采用git自动下载：</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> --recursive http://git.gnuradio.org/git/gnuradio.git</span><br></pre></td></tr></table></figure></p>
+<p>或者<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> --recursive git://git.gnuradio.org/gnuradio.git</span><br></pre></td></tr></table></figure></p>
+<p>这里我采用手动下载gnuradio3.5.0的安装包。<br>配置和编译GNU Radio:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> gnuradio</span><br><span class="line">$ mkdir build</span><br><span class="line">$ <span class="built_in">cd</span> build</span><br><span class="line">$ cmake ../</span><br><span class="line">$ make</span><br></pre></td></tr></table></figure></p>
+<p>注意:<br>默认情况下GNU Radio安装在/usr/local下，如果想自定义安装路径，那按照这种方法<a href="http://gnuradio.org/redmine/projects/gnuradio/wiki/UbuntuInstall#Installing-in-a-custom-directory" target="_blank" rel="external">http://gnuradio.org/redmine/projects/gnuradio/wiki/UbuntuInstall#Installing-in-a-custom-directory</a><br>运行以下代码确定是否成功编译：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ make <span class="built_in">test</span></span><br></pre></td></tr></table></figure></p>
+<p>如果没有问题则安装:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo make install</span><br></pre></td></tr></table></figure></p>
+<h2 id="4、设置环境变量"><a href="#4、设置环境变量" class="headerlink" title="4、设置环境变量"></a>4、设置环境变量</h2><hr>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">export</span> PYTHONPATH=/usr/<span class="built_in">local</span>/lib/python2.7/disk-packages</span><br><span class="line">$ <span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$LD_LIBRARY_PATH</span>:<span class="variable">$HOME</span>/<span class="built_in">local</span>/lib</span><br><span class="line">$ sudo ldconfig</span><br></pre></td></tr></table></figure>
+<p>其中python路径要根据我们的python版本设置<br>运行dial_tone.py看是否安装OK（不需要USRP）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./usr/<span class="built_in">local</span>/share/gnuradio/examples/audio/dial_tone.py</span><br></pre></td></tr></table></figure></p>
+<p>或者运行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gnuradio-companion</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/GNURadio/">GNURadio</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/06/29/在wordpress里面插入代码/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/06/29/在博客中插入公式/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/06/29/Ubuntu12.04 LTS 安装GNURadio和UHD/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

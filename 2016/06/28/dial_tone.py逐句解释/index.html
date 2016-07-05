@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>dial_tone.py逐句解释 | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="dial_tone.py逐句解释"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-28T07:42:19.000Z"><a href="/2016/06/28/dial_tone.py逐句解释/">2016-06-28</a></time>
+      
+      
+  
+    <h1 class="title">dial_tone.py逐句解释</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>这篇文章是GNURadio和python入门级的文章。dial_tone.py是GNURadio里面最基础的代码，现在将其逐句解释，配合python入门的文档，基本上就跨入了GNURadio的大门。<br><a id="more"></a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#首先引用模块，相当于include</span></span><br><span class="line"><span class="keyword">from</span> gnuradio <span class="keyword">import</span> gr  <span class="comment">#gnuradio里面的模块，gr里面包括了gnuradio里面的顶层模块类和信号处理模块等</span></span><br><span class="line"><span class="keyword">from</span> gnuradio <span class="keyword">import</span> audio <span class="comment">#gnuradio里面的模块，audio模块里面有一个音频sink模块来将音频波形输送到声卡</span></span><br><span class="line"><span class="keyword">from</span> gnuradio.eng_option <span class="keyword">import</span> eng_option  </span><br><span class="line"><span class="keyword">from</span> optparse <span class="keyword">import</span> OptionParser <span class="comment">#python里面的模块，方便命令行参数输入</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#try过程是尝试该语句，如果执行不了，那么会执行except部分的语句</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">from</span> gnuradio <span class="keyword">import</span> analog</span><br><span class="line"><span class="keyword">except</span> ImportError:</span><br><span class="line">    sys.stderr.write(<span class="string">"Error: Program requires gr-analog.\n"</span>)</span><br><span class="line">    sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#这是主要部分，根据面向对象编程思想，我们定义一个顶层流图类，继承于gnuradio的顶层类gr.top_block</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">my_top_block</span><span class="params">(gr.top_block)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>                 <span class="comment">#init函数是每个类都有的，初始化函数，生成类的实例时会运行该函数 </span></span><br><span class="line">        gr.top_block.__init__(self)     <span class="comment">#父类初始化</span></span><br><span class="line">		</span><br><span class="line">        <span class="comment">#创建一个命令行解析模块，这个模块方便在命令行对程序的参数进行配置</span></span><br><span class="line">        parser = OptionParser(option_class=eng_option) </span><br><span class="line">		<span class="comment">#给命令行解析模块添加不同选项，这样用户可以在命令行进行配置，</span></span><br><span class="line">		<span class="comment">#这里采用-o命令或--audio-output对audio-output参数进行配置，</span></span><br><span class="line">		<span class="comment">#如果用户不配置，那么采用默认值，或者将帮助内容显示出来提醒用户</span></span><br><span class="line">        parser.add_option(<span class="string">"-O"</span>, <span class="string">"--audio-output"</span>, type=<span class="string">"string"</span>, default=<span class="string">""</span>,</span><br><span class="line">                          help=<span class="string">"pcm output device name.  E.g., hw:0,0 or /dev/dsp"</span>)</span><br><span class="line">		<span class="comment">#给OptionParser添加选项，这里采用-r命令或--sample-rate 对sample-rate参数进行配，默认48000</span></span><br><span class="line">        parser.add_option(<span class="string">"-r"</span>, <span class="string">"--sample-rate"</span>, type=<span class="string">"eng_float"</span>, default=<span class="number">48000</span>,</span><br><span class="line">                          help=<span class="string">"set sample rate to RATE (48000)"</span>)</span><br><span class="line">		<span class="comment">#将用户的输入进行解析，解析到options, args两个参数里面，</span></span><br><span class="line">		<span class="comment">#options是一个对象（optpars.Values），保存有命令行参数值。</span></span><br><span class="line">		<span class="comment">#只要知道命令行参数名，如 file，就可以访问其对应的值： options.file 。args是参数列表</span></span><br><span class="line">        (options, args) = parser.parse_args()</span><br><span class="line">        <span class="keyword">if</span> len(args) != <span class="number">0</span>:</span><br><span class="line">            parser.print_help()</span><br><span class="line">            <span class="keyword">raise</span> SystemExit, <span class="number">1</span></span><br><span class="line"></span><br><span class="line">	    <span class="comment">#从命令行参数对象里面获取采样率options.sample_rate</span></span><br><span class="line">        sample_rate = int(options.sample_rate)</span><br><span class="line">        <span class="comment">#这个是波形的幅度，控制了输出的音量</span></span><br><span class="line">        ampl = <span class="number">0.1</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#创建两个信号源，都是正弦信号源，频率为350和440</span></span><br><span class="line">        src0 = analog.sig_source_f(sample_rate, analog.GR_SIN_WAVE, <span class="number">350</span>, ampl)</span><br><span class="line">        src1 = analog.sig_source_f(sample_rate, analog.GR_SIN_WAVE, <span class="number">440</span>, ampl)</span><br><span class="line">		<span class="comment">#创建一个音频信宿audio.sink</span></span><br><span class="line">        dst = audio.sink(sample_rate, options.audio_output)</span><br><span class="line">		<span class="comment">#连接信源和信宿</span></span><br><span class="line">        self.connect(src0, (dst, <span class="number">0</span>))</span><br><span class="line">        self.connect(src1, (dst, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#以上一个类定义完毕，该类没有定义init以外的方法，是最简单的一个类</span></span><br><span class="line"><span class="comment">#同时可以看到python没有begin和end,一个类，一个函数，以及任意一个块都是由缩进来区分的</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#除了定义以外的语句，再任何时候引用该py文件时，都会从上到下一次解释执行每一个语句</span></span><br><span class="line"><span class="comment">#对文件的引用无非两种情况</span></span><br><span class="line"><span class="comment">#一是采用python命令执行该文件 python dial_tone.py时，该文件的__name__域就是'__main__'，</span></span><br><span class="line"><span class="comment">#因此除了执行前面的import语句外，以下if语句成立，因此也会执行if语句块里面的语句</span></span><br><span class="line"><span class="comment">#二是在import dial_tone时，它的__name__域是它的模块名，因此执行了前面的import语句后</span></span><br><span class="line"><span class="comment">#以下if语句不成立，就不会执行。</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment">#依旧是try，run()函数继承自gr.top_block，一个流图在调用run()后流图开始运行</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        my_top_block().run() <span class="comment">#创建我们顶层模块的实例同时调用run()来启动流图</span></span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/GNURadio/">GNURadio</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/06/28/UDP socket学习示例/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/06/28/采用GNU Radio 和USRP进行GMSK无线视频传输/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/06/28/dial_tone.py逐句解释/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

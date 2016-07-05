@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>快速学习ubuntu12.04中MySQL基本操作 | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="快速学习ubuntu12.04中MySQL基本操作"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-29T09:32:39.000Z"><a href="/2016/06/29/快速学习ubuntu12.04中MySQL基本操作/">2016-06-29</a></time>
+      
+      
+  
+    <h1 class="title">快速学习ubuntu12.04中MySQL基本操作</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>mysql数据库操作简单，平台不限，因此很多场合都会使用，就算是大型分布式平台底层数据库大都基于mysql。但是虽然不难，一段时间不用时基本命令难免生疏，记录下来这些常见操作，省了很多事情。<br><a id="more"></a></p>
+<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><hr>
+<h2 id="登录mysql数据库"><a href="#登录mysql数据库" class="headerlink" title="登录mysql数据库"></a>登录mysql数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p</span><br></pre></td></tr></table></figure>
+<p>-u 表示选择登陆的用户名， -p 表示登陆的用户密码，上面命令输入之后会提示输入密码，此时输入密码就可以登录到mysql。<br>登录到mysql后就可以查看当前的数据库:</p>
+<h2 id="查看当前数据库"><a href="#查看当前数据库" class="headerlink" title="查看当前数据库"></a>查看当前数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;show databases;</span><br><span class="line"></span><br><span class="line">+--------------------+</span><br><span class="line">| Database |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql |</span><br><span class="line">| performance_schema |</span><br><span class="line">+--------------------+</span><br><span class="line">3 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</span><br></pre></td></tr></table></figure>
+<h2 id="使用数据库"><a href="#使用数据库" class="headerlink" title="使用数据库"></a>使用数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;use mysql;</span><br><span class="line"></span><br><span class="line">Reading table information <span class="keyword">for</span> completion of table and column names</span><br><span class="line">You can turn off this feature to get a quicker startup with -A</span><br><span class="line">Database changed</span><br></pre></td></tr></table></figure>
+<h2 id="显示当前数据库表单"><a href="#显示当前数据库表单" class="headerlink" title="显示当前数据库表单"></a>显示当前数据库表单</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;show tables;</span><br><span class="line"></span><br><span class="line">+---------------------------+</span><br><span class="line">| Tables_<span class="keyword">in</span>_mysql |</span><br><span class="line">+---------------------------+</span><br><span class="line">| columns_priv |</span><br><span class="line">| db |</span><br><span class="line">| event |</span><br><span class="line">| func |</span><br></pre></td></tr></table></figure>
+<h2 id="显示数据表结构"><a href="#显示数据表结构" class="headerlink" title="显示数据表结构"></a>显示数据表结构</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;describe 表名;</span><br></pre></td></tr></table></figure>
+<h2 id="显示表中记录"><a href="#显示表中记录" class="headerlink" title="显示表中记录"></a>显示表中记录</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;select * from 表名;</span><br></pre></td></tr></table></figure>
+<h2 id="建库"><a href="#建库" class="headerlink" title="建库"></a>建库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;create database 库名；</span><br></pre></td></tr></table></figure>
+<p>如：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;create database testdb；</span><br></pre></td></tr></table></figure></p>
+<h2 id="建表-在某个数据库下-："><a href="#建表-在某个数据库下-：" class="headerlink" title="建表(在某个数据库下)："></a>建表(在某个数据库下)：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;use 库名；</span><br><span class="line">&gt;create table 表名();</span><br></pre></td></tr></table></figure>
+<p>注意：建表前要确定是建在哪个数据库下。<br>如:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt;use testdb;</span><br><span class="line">&gt;create table student(id int(3) auto_increment not null primary key, name char(8), sex char(2), birth date);</span><br><span class="line">&gt;describe student;</span><br><span class="line"></span><br><span class="line">+-------+---------+------+-----+---------+----------------+</span><br><span class="line">| Field | Type | Null | Key | Default | Extra |</span><br><span class="line">+-------+---------+------+-----+---------+----------------+</span><br><span class="line">| id | int(3) | NO | PRI | NULL | auto_increment |</span><br><span class="line">| name | char(8) | YES | | NULL | |</span><br><span class="line">| sex | char(2) | YES | | NULL | |</span><br><span class="line">| birth | date | YES | | NULL | |</span><br><span class="line">+-------+---------+------+-----+---------+----------------+</span><br><span class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</span><br></pre></td></tr></table></figure></p>
+<h2 id="增加记录"><a href="#增加记录" class="headerlink" title="增加记录"></a>增加记录</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;insert into 表名 values();</span><br></pre></td></tr></table></figure>
+<p>如:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;insert into student values(<span class="string">''</span>, <span class="string">'zhangsan'</span>, <span class="string">'ma'</span>, <span class="string">'1990-1-1'</span>);</span><br><span class="line">&gt;insert into student values(<span class="string">''</span>, <span class="string">'lisi'</span>, <span class="string">'fe'</span>, <span class="string">'1990-05-20'</span>);</span><br><span class="line">&gt;select * from student;</span><br><span class="line"></span><br><span class="line">+----+----------+------+------------+</span><br><span class="line">| id | name | sex | birth |</span><br><span class="line">+----+----------+------+------------+</span><br><span class="line">| 1 | zhangsan | ma | 1990-01-01 |</span><br><span class="line">| 2 | lisi | fe | 1990-05-20 |</span><br><span class="line">+----+----------+------+------------+</span><br></pre></td></tr></table></figure></p>
+<h2 id="修改记录"><a href="#修改记录" class="headerlink" title="修改记录"></a>修改记录</h2><p>如将表studeng中记录zhangsan的birth改为1990-07-10：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;update student <span class="built_in">set</span> birth=<span class="string">'1990-07-10'</span> <span class="built_in">where</span> name=<span class="string">'zhangsan'</span>;</span><br><span class="line">&gt;select * from student;</span><br><span class="line"></span><br><span class="line">+----+----------+------+------------+</span><br><span class="line">| id | name | sex | birth |</span><br><span class="line">+----+----------+------+------------+</span><br><span class="line">| 1 | zhangsan | ma | 1990-07-10 |</span><br><span class="line">| 2 | lisi | fe | 1990-05-20 |</span><br><span class="line">+----+----------+------+------------+</span><br></pre></td></tr></table></figure></p>
+<h2 id="删除记录"><a href="#删除记录" class="headerlink" title="删除记录"></a>删除记录</h2><p>如删除表student中zhangsan的记录：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;delete from student <span class="built_in">where</span> name=<span class="string">'zhangsan'</span>;</span><br><span class="line">&gt;select * from student;</span><br><span class="line"></span><br><span class="line">+----+------+------+------------+</span><br><span class="line">| id | name | sex | birth |</span><br><span class="line">+----+------+------+------------+</span><br><span class="line">| 2 | lisi | fe | 1990-05-20 |</span><br><span class="line">+----+------+------+------------+</span><br></pre></td></tr></table></figure></p>
+<h2 id="删除库和删除表"><a href="#删除库和删除表" class="headerlink" title="删除库和删除表"></a>删除库和删除表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;drop table 表名;</span><br><span class="line">&gt;drop database 库名;</span><br></pre></td></tr></table></figure>
+<h1 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h1><hr>
+<h2 id="将csv文件导入mysql"><a href="#将csv文件导入mysql" class="headerlink" title="将csv文件导入mysql"></a>将csv文件导入mysql</h2><p>MYSQL LOAD DATA INFILE命令可以把csv平面文件中的数据导入到数据库中。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">LOAD DATA INFILE <span class="string">'/home/test/dump/ip_location.csv'</span></span><br><span class="line"> INTO TABLE ip_location</span><br><span class="line"> CHARACTER SET utf8</span><br><span class="line"> FIELDS TERMINATED BY <span class="string">','</span> ENCLOSED BY <span class="string">'"'</span>;</span><br><span class="line">--CHARACTER SET ：mysql字符集，一定要加上，免去乱码麻烦</span><br><span class="line">--INTO TABLE ：导入到哪个表</span><br><span class="line">--FIELDS TERMINATED BY ：以什么作为分割符</span><br><span class="line">-- ENCLOSED BY ：被什么包围</span><br></pre></td></tr></table></figure></p>
+<p>如：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; create table train_user(user_id varchar(10) not null,item_id varchar(10) not null, behavior_<span class="built_in">type</span> char(1) not null, user_geohash varchar(8), item_category varchar(6) not null, time datetime); </span><br><span class="line">&gt;load data <span class="built_in">local</span> infile <span class="string">'/home/lwj/tianchi/tianchi_mobile_recommend_train_user.csv'</span> into table train_user character <span class="built_in">set</span> utf8 fields terminated by <span class="string">','</span> enclosed by <span class="string">'"'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>导入时如果出现warning,采用如下命令查看waring，warnings还是看一下比较好。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show warnings;</span><br></pre></td></tr></table></figure></p>
+<h2 id="增加一列主键"><a href="#增加一列主键" class="headerlink" title="增加一列主键"></a>增加一列主键</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;alter table <span class="built_in">test</span>_user_item add id int(8) auto_increment not null primary key;</span><br></pre></td></tr></table></figure>
+<h1 id="常见错误"><a href="#常见错误" class="headerlink" title="常见错误"></a>常见错误</h1><hr>
+<h2 id="错误1："><a href="#错误1：" class="headerlink" title="错误1："></a>错误1：</h2><p>数据导入出错!<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;load data infile <span class="string">'/home/lwj/tianchi/tianchi_mobile_recommend_train_user.csv'</span> into table train_user character <span class="built_in">set</span> utf8 fields terminated by <span class="string">','</span> enclosed by <span class="string">'"'</span>;</span><br><span class="line"></span><br><span class="line">出错：</span><br><span class="line">ERROR 13 (HY000): Can<span class="string">'t get stat of '</span>/home/lwj/tianchi/tianchi_mobile_recommend_train_user.csv<span class="string">' (Errcode: 13)</span></span><br></pre></td></tr></table></figure></p>
+<p>原因分析：</p>
+<p>源自Mysql中文手册：<br>出于安全原因，当读取位于服务器中的文本文件时，文件必须位于数据库目录中，或者是全体可读的。另外，要对服务器文件使用LOAD DATA INFILE，您必须拥有FILE权限。<br>如果指定了LOCAL，则文件会被客户主机上的客户端读取，并被发送到服务器。文件会被给予一个完整的路径名称，以指定确切的位置。权限问题啊！</p>
+<p>解决办法：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">将LOAD DATA INFILE   </span><br><span class="line">换成</span><br><span class="line">LOAD DATA LOCAL INFILE    OK！</span><br></pre></td></tr></table></figure></p>
+<h2 id="错误2："><a href="#错误2：" class="headerlink" title="错误2："></a>错误2：</h2><p>数据导入出错!<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;load data <span class="built_in">local</span> infile <span class="string">'/home/lwj/tianchi/tianchi_mobile_recommend_train_user.csv'</span> into  table train_user character <span class="built_in">set</span> utf8 fields terminated by <span class="string">','</span> enclosed by <span class="string">'"'</span>; </span><br><span class="line"></span><br><span class="line">出错：</span><br><span class="line">ERROR 1148 (42000): The used <span class="built_in">command</span> is not allowed with this MySQL version</span><br></pre></td></tr></table></figure></p>
+<p>原因分析：<br>如果编译安装mysql时没有指定–enable-local-infile，那么在使用上述命令时会报以上的错误：非root用户从client机器load data local infile至remote mysql server时，出的错，在需要从client host导数据的情况下，登陆mysql时，需用–local-infile[=1]显式指定参数。</p>
+<p>解决办法：<br>重新退出，登录时将local-infile 指定为1：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p --local-infile=1</span><br></pre></td></tr></table></figure></p>
+<h2 id="错误3："><a href="#错误3：" class="headerlink" title="错误3："></a>错误3：</h2><p>数据导出出错!<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;select * from <span class="built_in">test</span> into outfile <span class="string">'/home/lwj/tianchi/code/test.csv'</span>fields terminated by <span class="string">','</span>optionally enclosed by <span class="string">'"'</span>lines terminated by <span class="string">'/n'</span>; </span><br><span class="line"></span><br><span class="line">出错：</span><br><span class="line">ERROR 1 (HY000): Can<span class="string">'t create/write to file '</span>/var/lib/mysql/home/lwj/tianchi/code/test.csv<span class="string">' (Errcode: 2)</span></span><br></pre></td></tr></table></figure></p>
+<p>原因分析：<br>出现该问题的原因一般都是向没有权限的文件或是目录写东西，然后报错。</p>
+<p>解决办法：<br>修改目录权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chown mysql:mysql /home/lwj/tianchi/code</span><br></pre></td></tr></table></figure>
+<p>可以直接导出到mysql文件夹里：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;select * from <span class="built_in">test</span> into outfile</span><br><span class="line"><span class="string">'/var/lib/mysql/test.csv'</span> fields terminated by <span class="string">','</span>optionally enclosed</span><br><span class="line">by <span class="string">'"'</span>lines terminated by <span class="string">'/n'</span>; </span><br><span class="line">Query OK, 10 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h2 id="错误4："><a href="#错误4：" class="headerlink" title="错误4："></a>错误4：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; use tianchi -A </span><br><span class="line"></span><br><span class="line">Reading table information <span class="keyword">for</span> completion of table and column names</span><br><span class="line">You can turn off this feature to get a quicker startup with -A</span><br></pre></td></tr></table></figure>
+<p>原因分析：<br>一般产生这个问题是由于MYSQL中数据库太大,导致读取预读时间太长,从而显示这个提示,如果之前都没有遇到这个问题,那么产生这个问题的原因可能是由于有改变数据库信息的操作,比如drop一个很大的表(几千万数据)而中途终止.先查看当前的进程情况。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; show processlist ;</span><br></pre></td></tr></table></figure>
+<p><img src="http://7xq3rr.com1.z0.glb.clouddn.com/linux/processlist.jpg" alt=""><br>解决办法：<br>上图中锁表的id为16545618,则可以使用kill命令,结束它。</p>
+<pre><code class="bash">&gt; <span class="built_in">kill</span> 16545618;
+</code></pre>
+<p>删除这些锁表的情况,我的mysql就能正常访问了.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/linux/">linux</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/06/29/在博客中插入公式/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/06/29/Ubuntu 12.04 LTS 配置python数据挖掘编程环境与mySQL/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/06/29/快速学习ubuntu12.04中MySQL基本操作/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

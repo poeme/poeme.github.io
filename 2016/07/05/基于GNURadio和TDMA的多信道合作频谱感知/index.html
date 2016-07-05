@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>基于GNURadio和TDMA的多信道合作频谱感知 | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="基于GNURadio和TDMA的多信道合作频谱感知"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-05T12:25:17.000Z"><a href="/2016/07/05/基于GNURadio和TDMA的多信道合作频谱感知/">2016-07-05</a></time>
+      
+      
+  
+    <h1 class="title">基于GNURadio和TDMA的多信道合作频谱感知</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>这里采用GNURadio和USRP实现多信道的合作频谱感知，采用TDMA，实现了一个简单协议。<br><a id="more"></a></p>
+<h2 id="1、时隙安排"><a href="#1、时隙安排" class="headerlink" title="1、时隙安排"></a>1、时隙安排</h2><p>为了方便观察，这里采用4个USRP来做实验，事实上，合作感知可以适应于任意个数的SU。<br>每个USRP有一个事先指定的ID，各个USRP的角色分配如表所示。<br>| USRP ID |  角色 |<br>|—————–|<br>|1        | SU1   |<br>|2        | SU2   |<br>|3        | PU    |<br>|4        |中心节点|<br>对于PU，只需要在相应频段发送数据即可，直接修改benchmark_tx.py使其在感知频段内的每一个时隙随机切换频段进行通信。<br>SU1 SU2作为合作感知的两个节点，将它们放在不同的方位，它们的通信采用TDMA的方式。<br>设计的时隙如图,由于各种硬件时延的不确定性以及为了方便观察各个阶段内的状态，这里时隙设计得较长。<br>|时间        |0~1s|1~3s|3~4s  |4~5s  |5~6s|6~10s|<br>|———————————————–|<br>|SU状态      |监听|感知|t1发收|t2发收|接收|使用 |<br>|flag        |1   |2   |3     |3     |4   |5    |<br>|中心节点状态|发送|安静|接收并发送|接收并决策   |发送|使用 |</p>
+<h2 id="2、SU状态"><a href="#2、SU状态" class="headerlink" title="2、SU状态"></a>2、SU状态</h2><hr>
+<p>（1）SU监听状态<br>节点参数调整到监听状态set_ctrchannel_parameters() flag=1<br>监听下行控制信道内由中心节点发出的信息，信息主要包括时隙开始时间，各个节点所分配到的时隙，以及时隙的长度，以及状态信息。<br>payload=str(flag)+str(time)<br>下行接收控制信道中心频率800M<br>上行发送控制信道中心频率810M</p>
+<p>（2）SU感知状态<br>节点参数调整到感知状态 set_sense_parameters() flag=2<br>感知4个信道的空闲情况<br>信道1 831.375M 750khz 831M~831.750M<br>信道2 832.125M 750khz 831.750M~832.500M<br>信道3 832.875M 750khz 832.500M~833.250M<br>信道4 833.625M 750khz 833.250M~834M<br>其感知结果最终打包成二进制比特。包中包含节点ID，4个信道的感知数据，flag信息。</p>
+<p>（3）SUt1发送，t2发送<br>上行控制信道发送set_ctrchannel_parameters() flag=3<br>这两个时隙分别分配给两个用户，它们在上行控制信道中将感知结果发送到中心节点。收到中心节点的确认信号时，停止发送。<br>payload=str(flag)+str(ID)+str(senseresult)</p>
+<p>（4）SU接收<br>下行控制信道接收set_ctrchannel_parameters() flag=4<br>下行控制信道接收决策信息，确定哪个信道可用，分配相应信道。</p>
+<p>（5）使用<br>接收到了后，使用相应的空闲信道</p>
+<h2 id="3、中心节点状态"><a href="#3、中心节点状态" class="headerlink" title="3、中心节点状态"></a>3、中心节点状态</h2><p>（1）发送<br>set_ctrchannel_parameters() flag=1<br>下行控制信道广播同步信息，包括时隙起始时间，各个节点分配的时隙，这里为了方便，直接将时隙1分配给SU1，时隙2分配给SU2。<br>下行发送800M<br>上行接收810M</p>
+<p>（2）安静<br>flag=2</p>
+<p>（3）接收并发送<br>set_ctrchannel_parameters() flag=3<br>上行接收感知结果，发送确认信号。</p>
+<p>（4）接收并决策<br>set_ctrchannel_parameters() flag=3<br>等接收到所有信号后，进行决策，包括or and方法</p>
+<p>（5）发送<br>set_ctrchannel_parameters() flag=4<br>在下行控制信道广播决策结果</p>
+<p>（6）使用<br>flag=5<br>使用空闲信道</p>
+<h2 id="4、各个节点的仿真结果显示"><a href="#4、各个节点的仿真结果显示" class="headerlink" title="4、各个节点的仿真结果显示"></a>4、各个节点的仿真结果显示</h2><p>两个USRP SU1和SU2经过感知，得到了感知结果：<br>SU1:<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/gnuradio/SU1_2.png" alt=""><br>SU2:<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/gnuradio/su2_2.png" alt=""><br>中心节点接收了结果后，对结果进行融合，得到感知结果，同时显示该时刻的频谱使用情况。<br>综合感知结果：<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/gnuradio/bs_2.png" alt=""><br>频谱使用情况：<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/gnuradio/detect.png" alt=""></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/GNURadio/">GNURadio</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/07/05/用过的图片外链方法/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/07/05/同时运行两个GNURadio流图/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/07/05/基于GNURadio和TDMA的多信道合作频谱感知/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

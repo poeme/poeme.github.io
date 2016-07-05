@@ -1,0 +1,229 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>linux中使用VLC实现摄像头多媒体流的推送 | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="linux中使用VLC实现摄像头多媒体流的推送"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-28T13:21:35.000Z"><a href="/2016/06/28/linux中使用VLC实现摄像头多媒体流的推送/">2016-06-28</a></time>
+      
+      
+  
+    <h1 class="title">linux中使用VLC实现摄像头多媒体流的推送</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>vlc是一个开源，跨平台的多媒体播放器，支持几乎所有的视频和音频格式，同时vlc也可以作为一个流媒体服务器，并支持多种协议，RTP, HTTP, RTSP等等。<br><a id="more"></a></p>
+<h2 id="1、安装VLC"><a href="#1、安装VLC" class="headerlink" title="1、安装VLC"></a>1、安装VLC</h2><hr>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install vlc</span><br></pre></td></tr></table></figure>
+<p>安装完成后，可以运行vlc<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vlc</span><br></pre></td></tr></table></figure></p>
+<h2 id="2、测试源"><a href="#2、测试源" class="headerlink" title="2、测试源"></a>2、测试源</h2><hr>
+<p>在连接好摄像头后，测试摄像头是否正常使用。<br>首先获取摄像头设备的名字<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls /dev/video*</span><br><span class="line">/dev/video0</span><br></pre></td></tr></table></figure></p>
+<p>可以看到摄像头的名字是 /dev/video0。<br>再测试摄像头，根据自己的摄像头名字替换相应设备名部分。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vlc v4l2:///dev/video0</span><br></pre></td></tr></table></figure></p>
+<p>如果摄像头工作正常，你可以看到摄像头所播放的视频流。</p>
+<h2 id="3、多媒体流的设置"><a href="#3、多媒体流的设置" class="headerlink" title="3、多媒体流的设置"></a>3、多媒体流的设置</h2><hr>
+<p>设置vlc多媒体流的推送有两种方式，GUI方式和命令行方式，下面先采用GUI方式说明。<br>运行vlc<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vlc</span><br></pre></td></tr></table></figure></p>
+<p>从左上角菜单中选择流。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/linux/stream.png" alt=""></p>
+<p>在弹出的窗口中选择“capture device”选项卡，分别设置video device name和audio device name（勾选show more options 可以看到选项所生成的命令，在命令行设置中可以用到），再点击stream按钮。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/linux/capture-device.png" alt=""><br>弹出一个界面，确认了source后，直接点next按钮。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/linux/next.png" alt=""><br>弹出的界面中，设置new destinatio为http，点add按钮，弹出以下界面，按图设置path，port，profile，点next按钮。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/linux/http.png" alt=""><br>这个框里面的字符串是这些设置的命令行，在命令行方式里将要使用到，直接点stream按钮可以生成http多媒体流。<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/linux/options.png" alt=""><br>要确认多媒体流是否推送到了TCP的8080端口，通过以下命令进行确认。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo netstat -nap | grep 8080</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://7xq3rr.com1.z0.glb.clouddn.com/linux/8080.png" alt=""></p>
+<h2 id="4、采用命令行方式设置多媒体流"><a href="#4、采用命令行方式设置多媒体流" class="headerlink" title="4、采用命令行方式设置多媒体流"></a>4、采用命令行方式设置多媒体流</h2><hr>
+<p>vlc采用cvlc命令设置命令行。使用命令行时，要设置三个字段的值，前面已经标出了将要在命令行将要使用的值，现在进行一下总结。</p>
+<p>“MRL”: v4l2:///dev/video0<br>“Edit options”: :v4l2-standard= :input-slave=alsa://hw:0,0 :live-caching=300<br>“Stream output string”:<br>:sout=#transcode{vcodec=h264,vb=0,scale=0,acodec=mpga,ab=128,channels=2,samplerate=44100}:std{access=udp{ttl=1},dst=127.0.0.1:1234} :sout-keep<br>将以上三项综合进命令行里，得到以下命令。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cvlc v4l2:///dev/video0 :v4l2-standard= :input-slave=alsa://hw:0,0 :live-caching=300 :sout=<span class="comment">#transcode&#123;vcodec=h264,vb=0,scale=0,acodec=mpga,ab=128,channels=2,samplerate=44100&#125;:std&#123;access=udp&#123;ttl=1&#125;,dst=127.0.0.1:1234&#125; :sout-keep</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="5、播放多媒体流"><a href="#5、播放多媒体流" class="headerlink" title="5、播放多媒体流"></a>5、播放多媒体流</h2><hr>
+<p>一旦流媒体服务器开始运行，那么可以通过这个地址访问到多媒体流。<br>http://<ip_address_of_webcam_host>:8080/mystream.ts<br>可以采用vlc player和mplayer实时播放多媒体流<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ vlc http://&lt;ip_address_of_webcam_host&gt;:8080/mystream.ts</span><br><span class="line">$ mplayer http://&lt;ip_address_of_webcam_host&gt;:8080/mystream.ts</span><br></pre></td></tr></table></figure></ip_address_of_webcam_host></p>
+<p>如果你在相同的主机上测试播放，那么可以使用回环地址 127.0.0.1。</p>
+<h2 id="6、参考"><a href="#6、参考" class="headerlink" title="6、参考"></a>6、参考</h2><hr>
+<p>  <a href="http://blog.chinaunix.net/uid-26527046-id-4409467" target="_blank" rel="external">使用vlc实现视频TS流的推送</a><br>  <a href="http://xmodulo.com/live-stream-video-webcam-linux.html" target="_blank" rel="external">How to live stream video from webcam on Linux</a><br>  <a href="http://www.cnblogs.com/MikeZhang/archive/2012/09/09/vlcStreamingServer20120909.html" target="_blank" rel="external">用vlc搭建简单流媒体服务器（UDP和TCP方式）</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/linux/">linux</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/06/29/Ubuntu 12.04 LTS 配置python数据挖掘编程环境与mySQL/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/06/28/UDP socket学习示例/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/06/28/linux中使用VLC实现摄像头多媒体流的推送/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

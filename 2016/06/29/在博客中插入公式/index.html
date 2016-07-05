@@ -1,0 +1,219 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在博客中插入公式 | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="在博客中插入公式"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-29T09:35:30.000Z"><a href="/2016/06/29/在博客中插入公式/">2016-06-29</a></time>
+      
+      
+  
+    <h1 class="title">在博客中插入公式</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>当博客中需要插入公式时，有两种方式插入公式：将公式转换成图片插入和使用LaTex代码。将公式转换成图片不仅需要图片空间，而且不整齐，采用LaTex代码有些浏览器不能支持加载不了，各有所短。<br><a id="more"></a></p>
+<h2 id="1、将公式转换成图片插入"><a href="#1、将公式转换成图片插入" class="headerlink" title="1、将公式转换成图片插入"></a>1、将公式转换成图片插入</h2><hr>
+<p> word另存为网页后，在目录里面会存在一个.files文件夹，里面的文件是word文件里面的所有图片和公式，然后直接在博客里面插入图片。</p>
+<h2 id="2、使用LaTex代码"><a href="#2、使用LaTex代码" class="headerlink" title="2、使用LaTex代码"></a>2、使用LaTex代码</h2><hr>
+<p>方法a：切换为html编辑模式，在html头中添加代码，导入mathML库如：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"http://common.cnblogs.com/script/ASCIIMathML.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后直接在博客中（不是html）书写latex语法公式，公式前后有$ 来包围住，例如:<br><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="formula">$ <span class="tag">\<span class="name">frac</span><span class="string">&#123;&#123;-b&#125;</span></span><span class="tag">\<span class="name">pm</span></span><span class="tag">\<span class="name">sqrt</span><span class="string">&#123;b^2-4ac&#125;</span></span>&#125;&#123;2a&#125; $</span></span><br></pre></td></tr></table></figure></p>
+<p>就会显示：<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/blog/gongshi.gif" alt=""></p>
+<p>方法b：或者直接在html中添加:<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="selector-tag">img</span> src=<span class="string">"http://latex.codecogs.com/gif.latex? 在这里填写你的latex代码"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>例如：<br><figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"http://latex.codecogs.com/gif.latex? \frac</span></span></span><span class="template-variable">&#123;-b\pm\sqrt&#123;b^2-4ac&#125;</span><span class="xml"><span class="tag"><span class="string">&#125;</span></span></span><span class="template-variable">&#123;2a&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> <span class="attr">alt</span>=<span class="string">""</span> /&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>就会显示<br><img src="http://7xq3rr.com1.z0.glb.clouddn.com/blog/gongshi.gif" alt=""></p>
+<p>主要的问题是LaTex代码如何生成，有几个LaTex代码在线公式编辑器，输入公式直接得到LaTex代码：<br>网址1：<a href="http://codecogs.com/latex/eqneditor.php" target="_blank" rel="external">http://codecogs.com/latex/eqneditor.php</a><br>网址2：<a href="http://www.numberempire.com/texequationeditor/equationeditor.php" target="_blank" rel="external">http://www.numberempire.com/texequationeditor/equationeditor.php</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/博客/">博客</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/06/29/Ubuntu12.04 LTS 安装GNURadio和UHD/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/06/29/快速学习ubuntu12.04中MySQL基本操作/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/06/29/在博客中插入公式/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

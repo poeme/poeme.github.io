@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>将USRP数据同时输入两个文件 | Poeme</title>
+  <meta name="author" content="Poeme">
+  
+  <meta name="description" content="life, study and work">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="将USRP数据同时输入两个文件"/>
+  <meta property="og:site_name" content="Poeme"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Poeme" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Poeme</a></h1>
+  <h2><a href="/">life, study and work</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="//">首页</a></li>
+    
+      <li><a href="//archives">归档</a></li>
+    
+      <li><a href="//about">关于</a></li>
+    
+      <li><a href="//todolist">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-05T12:21:46.000Z"><a href="/2016/07/05/将USRP数据同时输入两个文件/">2016-07-05</a></time>
+      
+      
+  
+    <h1 class="title">将USRP数据同时输入两个文件</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <blockquote>
+<p>这里将演示怎么将数据同时从一个USRP输入到两个不同的文件中。<br><a id="more"></a><br>Step -1 创建一个新文件命名”foo.py”</p>
+</blockquote>
+<p>Step-2 在开头编辑这两行<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python2.6</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br></pre></td></tr></table></figure></p>
+<p>根据自己的python版本修改python的版本号<br>这两行保证foo.py文件可执行</p>
+<p>Step-3 Import 所需的模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> gnuradio <span class="keyword">import</span> gr </span><br><span class="line"><span class="keyword">from</span> gnuradio <span class="keyword">import</span> uhd</span><br></pre></td></tr></table></figure></p>
+<p>gr模块主要包括top_block.py等，uhd包括usrp的相应模块</p>
+<p> Step-4 创建一个类<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">rx_cfile_block1</span><span class="params">(gr.top_block)</span>:</span></span><br></pre></td></tr></table></figure></p>
+<p>这样就创建了名为”rx_cfile_block1”的类，它是gr.top_block的衍生类。</p>
+<p>Step-5 定义这个类的一个方法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure></p>
+<p>每一个python类都有一个方法<strong>init</strong>()，且该方法有一个参数 “self”</p>
+<p>Step-6 构造该衍生类<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gr.top_block.__init__(self)</span><br></pre></td></tr></table></figure></p>
+<p>Step-7 实例化一个uhd源<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self.uhd_usrp_source = uhd.usrp_source(device_addr=<span class="string">"serial=1R270DU1"</span>,</span><br><span class="line">stream_args=uhd.stream_args(<span class="string">'fc32'</span>))</span><br></pre></td></tr></table></figure></p>
+<p>如果你希望记录复数信号数据，就用以上形式，如果你想记录short型信号，那么将fc32替换成fc16<br>可以不使用serial number而采用type=usrp1或type=usrp2代替</p>
+<p>Step-8 实例化两个文件类<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self.gr_file_sink_1 = gr.file_sink(gr.sizeof_gr_complex,<span class="string">"/home/username/first_app_data1"</span>)</span><br><span class="line">self.gr_file_sink_2 = gr.file_sink(gr.sizeof_gr_complex,<span class="string">"/home/username/first_app_data2"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>如果想要记录复数数据，按照以上来，如果你想记录short型数据，那么用gr.sizeof_short*2替代gr.sizeof_gr_complex。<br>对于收集short型数据，step-7和step-8都要按照要求修改</p>
+<p>Step-9 选择子设备<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.uhd_usrp_source.set_subdev_spec(<span class="string">"A:0"</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
+<p>Step-10 选择天线<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.uhd_usrp_source.set_antenna(<span class="string">"RX2"</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
+<p>对于子设备以及天线的细节，见: [Subdevices Tutorial in USRP][1]</p>
+<p>Step-11 设置采样率为1000000<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.uhd_usrp_source.set_samp_rate(<span class="number">1000000</span>)</span><br></pre></td></tr></table></figure></p>
+<p> Step-12 设置增益45dB<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.uhd_usrp_source.set_gain(<span class="number">45</span>)</span><br></pre></td></tr></table></figure></p>
+<p>Step-13 设置中心频率到2.45GHz<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">treq = uhd.tune_request(<span class="number">2450000000</span>)</span><br><span class="line">self.uhd_usrp_source.set_center_freq(treq)</span><br></pre></td></tr></table></figure></p>
+<p>Step-14 设置要收集的样本数1000000<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self.head_1 = gr.head(gr.sizeof_gr_complex, int(<span class="number">1000000</span>))</span><br><span class="line">self.head_2 = gr.head(gr.sizeof_gr_complex, int(<span class="number">1000000</span>))</span><br></pre></td></tr></table></figure></p>
+<p>Step-15 将各个模块连接起来<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># It connects the uhd source, the head and the sink</span></span><br><span class="line">self.connect(self.uhd_usrp_source,self.head_1,self.gr_file_sink_1)</span><br><span class="line">self.connect(self.uhd_usrp_source,self.head_2,self.gr_file_sink_2)</span><br></pre></td></tr></table></figure></p>
+<p>Step-16 在文件最后加上如下代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:     </span><br><span class="line">       tb = rx_cfile_block1()</span><br><span class="line">       tb.run()</span><br></pre></td></tr></table></figure></p>
+<p>打开终端，进入文件的路径，输入：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>chmod +x foo.py</span><br><span class="line"><span class="variable">$ </span>./foo.py</span><br></pre></td></tr></table></figure></p>
+<p>那么数据将收集到first_app_data1文件中</p>
+<p>使用如下代码将画出数据波形<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gr_plot_psd_c /home/username/first_app_data1 <span class="comment"># for PSD</span></span><br><span class="line">gr_plot_psd_c /home/username/first_app_data2 <span class="comment"># for PSD</span></span><br><span class="line">gr_plot_fft_c /home/username/first_app_data1 <span class="comment"># for FFT</span></span><br><span class="line">gr_plot_fft_c /home/username/first_app_data2 <span class="comment"># for FFT</span></span><br></pre></td></tr></table></figure></p>
+<p>program :<br><a href="http://www.2shared.com/file/Lrj95l69/pgm_2.html" target="_blank" rel="external">http://www.2shared.com/file/Lrj95l69/pgm_2.html</a><br><a href="http://sumitgnuradio.blogspot.in/2012/10/quick-dirty-part-2-data-dumping-into.html" target="_blank" rel="external">http://sumitgnuradio.blogspot.in/2012/10/quick-dirty-part-2-data-dumping-into.html</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/GNURadio/">GNURadio</a>
+  </div>
+
+        
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2016/07/05/同时运行两个GNURadio流图/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2016/07/05/从两个USRP同时获取数据/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://poeme.cc/2016/07/05/将USRP数据同时输入两个文件/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"poeme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:poeme.cc">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/GNURadio/">GNURadio</a><small>11</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>1</small></li>
+  
+    <li><a href="/categories/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>5</small></li>
+  
+    <li><a href="/categories/博客/">博客</a><small>4</small></li>
+  
+    <li><a href="/categories/机器学习/">机器学习</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Poeme
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
